@@ -131,7 +131,7 @@ export const updatePersonalData = async (req, res, next) => {
       req.user.id,
       { name, lastName, nif },
       { new: true }
-    );
+    ).select("-password -verificationCode -verificationAttempts -refreshToken");
 
     if (!user) {
       return next(AppError.notFound("Usuario no encontrado"));

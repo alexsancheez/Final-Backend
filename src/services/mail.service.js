@@ -19,13 +19,17 @@ export const sendVerificationEmail = async (email, code) => {
     return;
   }
 
-  await transporter.sendMail({
-    from: config.email.user,
-    to: email,
-    subject: "BildyApp - Codigo de verificacion",
-    text: "Tu codigo de verificacion es: " + code,
-    html: "<p>Tu codigo de verificacion es: <strong>" + code + "</strong></p>",
-  });
+  try {
+    await transporter.sendMail({
+      from: config.email.user,
+      to: email,
+      subject: "BildyApp - Codigo de verificacion",
+      text: "Tu codigo de verificacion es: " + code,
+      html: "<p>Tu codigo de verificacion es: <strong>" + code + "</strong></p>",
+    });
+  } catch (error) {
+    console.error("Error enviando email:", error.message);
+  }
 };
 
 export default { sendVerificationEmail };

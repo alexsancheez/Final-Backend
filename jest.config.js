@@ -10,4 +10,12 @@ export default {
   testMatch: ["**/tests/**/*.test.js"],
   verbose: true,
   testTimeout: 30000,
+  collectCoverageFrom: [
+    "src/**/*.js",
+    "!src/services/pdf.service.js",
+    "!src/services/cloudinary.service.js",
+    "!src/config/swagger.js",
+    "!src/config/database.js",
+    "!src/index.js",
+  ],
 };
