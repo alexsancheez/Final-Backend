@@ -1,0 +1,194 @@
+### Variables
+@baseUrl = http://localhost:3000
+@token = TU_TOKEN
+
+### Health check
+GET {{baseUrl}}/health
+
+### ---- USUARIOS ----
+
+### Registro
+POST {{baseUrl}}/api/user/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "12345678"
+}
+
+### Validar email
+PUT {{baseUrl}}/api/user/validation
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "code": "123456"
+}
+
+### Login
+POST {{baseUrl}}/api/user/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "12345678"
+}
+
+### Datos personales
+PUT {{baseUrl}}/api/user/register
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Juan",
+  "lastName": "Garcia",
+  "nif": "12345678A"
+}
+
+### Crear empresa
+PATCH {{baseUrl}}/api/user/company
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "isFreelance": false,
+  "name": "Mi Empresa SL",
+  "cif": "B12345678",
+  "address": {
+    "street": "Calle Mayor",
+    "number": "10",
+    "postal": "28001",
+    "city": "Madrid",
+    "province": "Madrid"
+  }
+}
+
+### Obtener usuario
+GET {{baseUrl}}/api/user
+Authorization: Bearer {{token}}
+
+### ---- CLIENTES ----
+
+### Crear cliente
+POST {{baseUrl}}/api/client
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Cliente Ejemplo",
+  "cif": "A99999999",
+  "email": "cliente@ejemplo.com",
+  "phone": "666111222",
+  "address": {
+    "street": "Avenida Test",
+    "number": "5",
+    "postal": "28002",
+    "city": "Madrid",
+    "province": "Madrid"
+  }
+}
+
+### Listar clientes
+GET {{baseUrl}}/api/client?page=1&limit=10
+Authorization: Bearer {{token}}
+
+### Obtener cliente
+GET {{baseUrl}}/api/client/ID_CLIENTE
+Authorization: Bearer {{token}}
+
+### Actualizar cliente
+PUT {{baseUrl}}/api/client/ID_CLIENTE
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Cliente Actualizado"
+}
+
+### Archivar cliente
+DELETE {{baseUrl}}/api/client/ID_CLIENTE?soft=true
+Authorization: Bearer {{token}}
+
+### Clientes archivados
+GET {{baseUrl}}/api/client/archived
+Authorization: Bearer {{token}}
+
+### Restaurar cliente
+PATCH {{baseUrl}}/api/client/ID_CLIENTE/restore
+Authorization: Bearer {{token}}
+
+### ---- PROYECTOS ----
+
+### Crear proyecto
+POST {{baseUrl}}/api/project
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Reforma Oficina",
+  "projectCode": "PRJ-001",
+  "client": "ID_CLIENTE",
+  "address": {
+    "street": "Calle Obra",
+    "number": "3",
+    "postal": "28003",
+    "city": "Madrid",
+    "province": "Madrid"
+  }
+}
+
+### Listar proyectos
+GET {{baseUrl}}/api/project?page=1&limit=10
+Authorization: Bearer {{token}}
+
+### ---- ALBARANES ----
+
+### Crear albaran de horas
+POST {{baseUrl}}/api/deliverynote
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "project": "ID_PROYECTO",
+  "client": "ID_CLIENTE",
+  "format": "hours",
+  "description": "Trabajo de fontaneria",
+  "workDate": "2025-06-15",
+  "hours": 8,
+  "workers": [
+    { "name": "Juan", "hours": 4 },
+    { "name": "Pedro", "hours": 4 }
+  ]
+}
+
+### Crear albaran de material
+POST {{baseUrl}}/api/deliverynote
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "project": "ID_PROYECTO",
+  "client": "ID_CLIENTE",
+  "format": "material",
+  "description": "Entrega de material",
+  "workDate": "2025-06-16",
+  "material": "Cemento Portland",
+  "quantity": 50,
+  "unit": "sacos"
+}
+
+### Listar albaranes
+GET {{baseUrl}}/api/deliverynote?page=1&limit=10
+Authorization: Bearer {{token}}
+
+### Obtener albaran
+GET {{baseUrl}}/api/deliverynote/ID_ALBARAN
+Authorization: Bearer {{token}}
+
+### Descargar PDF
+GET {{baseUrl}}/api/deliverynote/pdf/ID_ALBARAN
+Authorization: Bearer {{token}}
+
+### Eliminar albaran
+DELETE {{baseUrl}}/api/deliverynote/ID_ALBARAN
+Authorization: Bearer {{token}}
