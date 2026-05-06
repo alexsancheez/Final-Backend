@@ -168,7 +168,13 @@ export const updateCompany = async (req, res, next) => {
       user.role = "guest";
       await user.save();
 
-      return res.json({ user, company: existingCompany });
+      const userObj = user.toObject();
+      delete userObj.password;
+      delete userObj.verificationCode;
+      delete userObj.verificationAttempts;
+      delete userObj.refreshToken;
+
+      return res.json({ user: userObj, company: existingCompany });
     }
 
     const company = await Company.create({
@@ -179,7 +185,13 @@ export const updateCompany = async (req, res, next) => {
     user.company = company._id;
     await user.save();
 
-    res.status(201).json({ user, company });
+    const userObj = user.toObject();
+    delete userObj.password;
+    delete userObj.verificationCode;
+    delete userObj.verificationAttempts;
+    delete userObj.refreshToken;
+
+    res.status(201).json({ user: userObj, company });
   } catch (error) {
     next(error);
   }

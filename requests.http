@@ -1,7 +1,6 @@
 ### Variables
 @baseUrl = http://localhost:3000
-@token = TU_TOKEN
-
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZmI2ZjVmZWMxZDhlNGRiY2Y1NWU5MCIsImVtYWlsIjoiYWxleEBleGFtcGxlLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3ODA5MTUyOCwiZXhwIjoxNzc4MDkyNDI4fQ.K7zKkt8qW1LrUYvnfYh2RNpAXYPny_b61OCxHVGht5s
 ### Health check
 GET {{baseUrl}}/health
 
@@ -12,7 +11,7 @@ POST {{baseUrl}}/api/user/register
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "alex@example.com",
   "password": "12345678"
 }
 
@@ -30,7 +29,7 @@ POST {{baseUrl}}/api/user/login
 Content-Type: application/json
 
 {
-  "email": "test@example.com",
+  "email": "alex@example.com",
   "password": "12345678"
 }
 
@@ -52,7 +51,7 @@ Authorization: Bearer {{token}}
 
 {
   "isFreelance": false,
-  "name": "Mi Empresa SL",
+  "name": "BlumeSec SL",
   "cif": "B12345678",
   "address": {
     "street": "Calle Mayor",
@@ -66,6 +65,20 @@ Authorization: Bearer {{token}}
 ### Obtener usuario
 GET {{baseUrl}}/api/user
 Authorization: Bearer {{token}}
+
+### Invitar usuario (solo admin)
+POST {{baseUrl}}/api/user/invite
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "email": "trabajador@ejemplo.com",
+  "password": "password123",
+  "name": "Pepe",
+  "lastName": "El Trabajador",
+  "nif": "87654321B"
+}
+
 
 ### ---- CLIENTES ----
 
@@ -127,7 +140,7 @@ Authorization: Bearer {{token}}
 {
   "name": "Reforma Oficina",
   "projectCode": "PRJ-001",
-  "client": "ID_CLIENTE",
+  "client": "69fb73cbec1d8e4dbcf55e9d",
   "address": {
     "street": "Calle Obra",
     "number": "3",
@@ -149,8 +162,8 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "project": "ID_PROYECTO",
-  "client": "ID_CLIENTE",
+  "project": "69fb7400ec1d8e4dbcf55ea2",
+  "client": "69fb73cbec1d8e4dbcf55e9d",
   "format": "hours",
   "description": "Trabajo de fontaneria",
   "workDate": "2025-06-15",
@@ -182,13 +195,13 @@ GET {{baseUrl}}/api/deliverynote?page=1&limit=10
 Authorization: Bearer {{token}}
 
 ### Obtener albaran
-GET {{baseUrl}}/api/deliverynote/ID_ALBARAN
+GET {{baseUrl}}/api/deliverynote/69fb75a1ec1d8e4dbcf55ea9
 Authorization: Bearer {{token}}
 
 ### Descargar PDF
-GET {{baseUrl}}/api/deliverynote/pdf/ID_ALBARAN
+GET {{baseUrl}}/api/deliverynote/pdf/69fb75a1ec1d8e4dbcf55ea9
 Authorization: Bearer {{token}}
 
 ### Eliminar albaran
-DELETE {{baseUrl}}/api/deliverynote/ID_ALBARAN
+DELETE {{baseUrl}}/api/deliverynote/69fb75a1ec1d8e4dbcf55ea9
 Authorization: Bearer {{token}}
