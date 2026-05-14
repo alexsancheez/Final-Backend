@@ -62,6 +62,7 @@ const deliveryNoteSchema = new mongoose.Schema(
 deliveryNoteSchema.index({ company: 1 });
 deliveryNoteSchema.index({ project: 1 });
 deliveryNoteSchema.index({ client: 1 });
+deliveryNoteSchema.index({ company: 1, deleted: 1, workDate: -1 });
 
 const DeliveryNote = mongoose.model("DeliveryNote", deliveryNoteSchema);
 
