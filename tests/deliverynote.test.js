@@ -2,6 +2,7 @@ import request from "supertest";
 import app from "../src/app.js";
 import { connect, closeDatabase, clearDatabase } from "./setup.js";
 import { registerAndLogin, setupCompany } from "./helpers.js";
+import DeliveryNote from "../src/models/DeliveryNote.js";
 
 beforeAll(async () => await connect());
 afterEach(async () => await clearDatabase());
@@ -93,8 +94,25 @@ describe("DeliveryNotes", () => {
     });
   });
 
+  describe("PATCH /api/deliverynote/:id/sign", () => {
+    it("devuelve 409 si el albaran ya estaba firmado", async () => {
+      const createRes = await request(app)
+        .post("/api/deliverynote")
+        .set("Authorization", "Bearer " + token)
+        .send(getNoteData());
+
+      await DeliveryNote.findByIdAndUpdate(createRes.body._id, { signed: true });
+
+      await request(app)
+        .patch("/api/deliverynote/" + createRes.body._id + "/sign")
+        .set("Authorization", "Bearer " + token)
+        .attach("signature", Buffer.from("fake"), "test.jpg")
+        .expect(409);
+    });
+  });
+
   describe("DELETE /api/deliverynote/:id", () => {
-    it("deberia eliminar un albaran no firmado", async () => {
+    it("devuelve 200 si el albaran no esta firmado", async () => {
       const createRes = await request(app)
         .post("/api/deliverynote")
         .set("Authorization", "Bearer " + token)
@@ -104,6 +122,35 @@ describe("DeliveryNotes", () => {
         .delete("/api/deliverynote/" + createRes.body._id)
         .set("Authorization", "Bearer " + token)
         .expect(200);
+    });
+
+    it("devuelve 409 si el albaran ya estaba firmado", async () => {
+      const createRes = await request(app)
+        .post("/api/deliverynote")
+        .set("Authorization", "Bearer " + token)
+        .send(getNoteData());
+
+      await DeliveryNote.findByIdAndUpdate(createRes.body._id, { signed: true });
+
+      await request(app)
+        .delete("/api/deliverynote/" + createRes.body._id)
+        .set("Authorization", "Bearer " + token)
+        .expect(409);
+    });
+
+    it("devuelve 404 si el albaran pertenece a otra compania", async () => {
+      const createRes = await request(app)
+        .post("/api/deliverynote")
+        .set("Authorization", "Bearer " + token)
+        .send(getNoteData());
+
+      const token2 = await registerAndLogin("other@test.com");
+      await setupCompany(token2);
+
+      await request(app)
+        .delete("/api/deliverynote/" + createRes.body._id)
+        .set("Authorization", "Bearer " + token2)
+        .expect(404);
     });
   });
 
