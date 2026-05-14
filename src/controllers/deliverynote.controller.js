@@ -165,7 +165,7 @@ export const signDeliveryNote = async (req, res, next) => {
     }
 
     if (note.signed) {
-      return next(AppError.badRequest("El albaran ya esta firmado"));
+      return next(AppError.conflict("El albaran ya esta firmado"));
     }
 
     const optimizedBuffer = await sharp(req.file.buffer)
@@ -226,7 +226,7 @@ export const deleteDeliveryNote = async (req, res, next) => {
     }
 
     if (note.signed) {
-      return next(AppError.badRequest("No se puede eliminar un albaran firmado"));
+      return next(AppError.conflict("No se puede eliminar un albaran firmado"));
     }
 
     await note.deleteOne();
